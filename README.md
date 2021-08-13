@@ -273,7 +273,18 @@ nginx如何调用PHP(nginx+php运行原理)
      $shapemark->drawCircle();
      $shapemark->drawRectangle();
      $shapemark->drawSquare();`
-## 自动加载原理
+## 常见问题
+### 1.static关键字的作用，跟其他的属性有什么区别
+### 2.private,protected,public的区别
+    > private只能在当前类中调用
+    > protected能在当前类中调用也能在子类中调用
+    > public可以到所有类中
+### 3.抽象类，接口的区别
+### 4.依赖注入/控制反转的原理与作用  
+    原理：
+    作用：1.减少系统的耦合度
+          2.减少系统类的创建
+### 5.自动加载原理
     https://segmentfault.com/a/1190000014948542
     1.启动
     <?php
@@ -360,7 +371,7 @@ nginx如何调用PHP(nginx+php运行原理)
 ## 算法
 ### 10大排序算法
 #### 1.冒泡排序
-    `$data = [23, 45, 8, 11, 10, 31, 55, 96, 30, 22];
+    $data = [23, 45, 8, 11, 10, 31, 55, 96, 30, 22];
      $len = count($data);
      
      for ($i = 0; $i < $len - 1; $i++) {
@@ -371,7 +382,9 @@ nginx如何调用PHP(nginx+php运行原理)
                  $data[$j] = $tmp;
              }
          }
-     }`
+     }
+     时间复杂度：最优o(n) 最差o(n*n)
+     
 #### 2.快速排序
     `function quick($originalData) {
          $lenght = count($originalData);
@@ -463,9 +476,18 @@ nginx如何调用PHP(nginx+php运行原理)
          }
      }
      print_r($data);`
+     
 ### 7大查找算法
 #### 1.二分查找
 #### 2.折半查找
+
+### 二叉树
+    前序：根结点 ---> 左子树 ---> 右子树
+    中序：左子树---> 根结点 ---> 右子树
+    后序：左子树 ---> 右子树 ---> 根结点
+    层次遍历：按层次排序
+    深度优先：
+    广度优先：
 ## 场景开发
 ### 秒杀，抢购
     https://blog.csdn.net/qq_30089923/article/details/96886668
@@ -480,6 +502,14 @@ nginx如何调用PHP(nginx+php运行原理)
         使用redis队列，因为pop操作是原子的，即使有很多用户同时到达，
         也是依次执行，推荐使用（mysql事务在高并发下性能下降很厉害，
         文件锁的方式也是）
+    三、企业针对超卖问题的处理
+        1.mysql悲观锁
+            SELECT * FROM employee WHERE id = 1 FOR UPDATE;
+            问题：会造成大量的死锁
+        2.mysql乐观锁
+        3.PHP+队列
+        4.PHP+redis分布式锁，以及分布式锁主流优化方案
+        5.PHP+redis乐观锁 redis watch
 ## mysql
 ### mysql锁
 
@@ -540,16 +570,40 @@ nginx如何调用PHP(nginx+php运行原理)
     异构索引表
     分库分表使用场景
     1.订单分库分表
-### 分布式
+### 分布式事务
 	https://www.cnblogs.com/jajian/p/10014145.html
 	xa事务
 	2pc(两阶段提交)：第一次提交时准备操作，第二次提交时真正的提交-------------->产生的问题：数据不一致
     	3pc(三阶段提交)：在2pc的基础上多了一次消息通知的阶段住要 第一次提交完了通知第二次进行提交--------->mysql官方暂时未实现
     	tcc(TCC两阶段补偿型)：在2pc的基础上使用接口来处理事务的回滚操作
 	mq(最终一致性，幂等性)：使用rabbit ack高级特性
+## 分布式事务行业主要解决方案介绍
+#### 两阶段提交（2PC）（two-phase commit protocol）
+    第一阶段：请求/表决阶段
+    第二阶段：提交/执行阶段（正常流程）
+    第二阶段：提交/执行阶段（异常流程）
+    遇到的一些问题：
+       1.性能问题
+       2.协调者单点故障问题
+       3.丢失消息导致的数据不一致问题
+#### 三阶段提交（3PC）
+    三阶段提交又称3PC，其在两阶段提交的基础上增加了CanCommit阶段，
+    并引入了超时机制。一旦事务参与者迟迟没有收到协调者的Commit请求，
+    就会自动进行本地commit，这样相对有效地解决了协调者单点故障的问题。
+    解决了：
+        1.性能问题
+        2.协调者单点故障问题
+        3.然没有完全解决数据不一致的问题
+#### 补偿事务（TCC）
+    Try阶段：主要是对业务系统做检测及资源预留。
+    Confirm阶段：确认执行业务操作。 通过调用确认接口
+    Cancel阶段：取消执行业务操作。 通过调用取消接口
+#### MQ最终一致性事务
+
 ### 高可用
 
 ## redis
+### redis list,hash,使用比较慢的命令为什么慢
 ### redis为什么那么快
     
     1.完全基于内存
@@ -818,4 +872,17 @@ nginx如何调用PHP(nginx+php运行原理)
             2.nginx访问日志
     吞吐量：单位时间内处理的任务数
     https://www.huaweicloud.com/articles/e69c2d94805734d47a5b86d4f70b7d3b.html
+
+## git
+### git有哪些主流的工作流
+#### 1.集中式工作流
+类似于集中式版本控制，以中央仓库作为项目所有修改的单点实体，在git中我们使用master
+分支作为主干分支，所有修改都提交到master上，在集中式工作流中我们只使用master。
+#### 2.功能分支工作流
+不在master分支上做开发，每个功能模块基于一个专门的分支。功能开发促成了Pull Request 
+工作流，每个PR让技术负责人review代码，检查无误后merge到master分支上。
+#### 3.Git flow工作流
+远程仓库作为开发者的交互中心，同时围绕master、release、develop、feature
+feature是统称不止这一个）四种分支协作，完成多环境、多任务的代码管理。
+#### 4.Github工作流
 
