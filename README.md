@@ -3,7 +3,7 @@
 ### 底层原理
 PHP语言的整体架构图(包括其核心的组成模块即可)
 
-![RUNOOB 图标](asset/php.jpg)   
+![RUNOOB 图标](asset/php.jpg)   sss
 
     Application: 程序员编写的 PHP 程序，无论是 Web 应用还是 Cli 方式运行的应用都是上层应用，PHP 程序员主要工作就是编写它们。 
     
