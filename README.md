@@ -79,6 +79,164 @@ nginx如何调用PHP(nginx+php运行原理)
     strpos() 返回字符串在另一字符串中第一次出现的位置（对大小写敏感）。
     strripos() 查找字符串在另一字符串中最后一次出现的位置（对大小写不敏感）。
     strrpos() 查找字符串在另一字符串中最后一次出现的位置（对大小写敏感）。
+### PHP7与PHP5区别
+    1、性能提升：PHP7比PHP5.0性能提升了两倍。
+    2、以前的许多致命错误，现在改成抛出异常。
+    3、PHP 7.0比PHP5.0移除了一些老的不在支持的SAPI（服务器端应用编程端口）和扩展。
+    4、PHP 7.0比PHP5.0新增了空接合操作符。
+    5、PHP 7.0比PHP5.0新增加了结合比较运算符。
+    6、PHP 7.0比PHP5.0新增加了函数的返回类型声明。
+    7、PHP 7.0比PHP5.0新增加了标量类型声明。
+    8、PHP 7.0比PHP5.0新增加匿名类。
+### 为什么 PHP7 比 PHP5 性能提升了？
+    1、变量存储字节减小，减少内存占用，提升变量操作速度
+    2、改善数组结构，数组元素和hash映射表被分配在同一块内
+    存里，降低了内存占用、提升了 cpu 缓存命中率
+    3、改进了函数的调用机制，通过优化参数传递的环节，减少了一些指令，提高执行效率
+### 面向对象
+#### 面向对象三大特性
+    1. 封装
+    封装，就是将客观事物抽象为逻辑实体，实体的属性和功能相结合，形成一个有机的整体。
+    并对实体的属性和功能实现进行访问控制，向信任的实体开放，对不信任的实体隐藏。
+    通过开放的外部接口即可访问，无需知道功能如何实现。
+    封装主要有以下目的：
+    1)可隐藏实体实现的细节。
+    2)提高安全性，设定访问控制，只允许具有特定权限的使用者调用。
+    3)简化编程，调用方无需知道功能是怎么实现的，即可调用。
+    2. 继承
+    3. 多态
+    多态，是指一个类的同名方法，在不同情况下的实现细节不同。
+    多态机制实现不同的内部实现结构共用同一个外部接口。
+    多态有以下目的：
+        1.一个外部接口可被多个同类使用。
+        2.不同对象调用同个方法，可有不同实现。
+    实现多态二种方式： 
+        1.覆盖，是指子类重新定义父类的虚函数的做法。 
+        2.重载，是指允许存在多个同名函数，而这些函数的参数表不同
+        （或许参数个数不同，或许参数类型不同，或许两者都不同）
+    参考链接：
+    https://segmentfault.com/a/1190000021898422
+    https://www.huaweicloud.com/articles/12538958.html
+#### 面向对象的五大基本原则
+    1. 单一职责原则（SRP）
+    2. 开放封闭原则（OCP）
+    3.里氏替换原则（LSP)
+    4. 依赖倒置原则（DIP)
+    5. 接口隔离原则   
+#### 抽象类，接口的区别
+### 关键的字
+#### 1.trait关键字用处
+#### 2.static关键字的作用，跟其他的属性有什么区别
+#### 2.private,protected,public的区别
+    > private只能在当前类中调用
+    > protected能在当前类中调用也能在子类中调用
+    > public可以到所有类中
+### 正则使用
+    1.用户邮箱
+    "/^[a-zA-Z0-9-]+@[a-zA-Z0-9-]+(.[a-zA-Z0-9_-]+)+$/"; 
+    2.手机号
+    3.    
+
+### 常见问题
+### 4.依赖注入/控制反转的原理与作用  
+    原理：
+    作用：1.减少系统的耦合度
+          2.减少系统类的创建
+### 5.自动加载原理
+    https://segmentfault.com/a/1190000014948542
+    1.启动
+    <?php
+      define('LARAVEL_START', microtime(true));
+    
+      require __DIR__ . '/../vendor/autoload.php';
+      
+    去 vendor 目录下的 autoload.php ：
+    <?php
+      require_once __DIR__ . '/composer' . '/autoload_real.php';
+    
+      return ComposerAutoloaderInit7b790917ce8899df9af8ed53631a1c29::getLoader();
+      
+    2.Composer自动加载文件
+    3.autoload_real 引导类
+        第一部分——单例
+        第二部分——构造ClassLoader核心类
+        第三部分 —— 初始化核心类对象
+            autoload_static 静态初始化 ( PHP >= 5.6 )
+            classMap（命名空间映射）
+            ClassLoader 接口初始化（ PHP < 5.6 ）
+            命名空间映射
+        第四部分 —— 注册
+            全局函数的自动加载
+            静态初始化：
+            普通初始化
+            加载全局函数
+        第五部分 —— 运行
+        
+    我们通过举例来说下上面代码的流程：
+    如果我们在代码中写下 new phpDocumentor\Reflection\Element()，PHP 会通过 SPL_autoload_register 调用 
+    loadClass -> findFile -> findFileWithExtension。步骤如下：
+    将 \ 转为文件分隔符/，加上后缀php，变成 $logicalPathPsr4, 即 phpDocumentor/Reflection//Element.php;
+    利用命名空间第一个字母p作为前缀索引搜索 prefixLengthsPsr4 数组，查到下面这个数组：
+            p' => 
+                array (
+                    'phpDocumentor\\Reflection\\' => 25,
+                    'phpDocumentor\\Fake\\' => 19,
+              )
+    遍历这个数组，得到两个顶层命名空间 phpDocumentor\Reflection\ 和 phpDocumentor\Fake\
+    在这个数组中查找 phpDocumentor\Reflection\Element，找出 phpDocumentor\Reflection\ 这个顶层命名空间并且长度为25。
+    在prefixDirsPsr4 映射数组中得到phpDocumentor\Reflection\ 的目录映射为：
+        'phpDocumentor\\Reflection\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+                1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+                2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            ),
+    遍历这个映射数组，得到三个目录映射；
+    查看 “目录+文件分隔符//+substr(&dollar;logicalPathPsr4, &dollar;length)”文件是否存在，存在即返回。这里就是
+    '__DIR__/../phpdocumentor/reflection-common/src + substr(phpDocumentor/Reflection/Element.php,25)'
+    如果失败，则利用 fallbackDirsPsr4 数组里面的目录继续判断是否存在文件
+    以上就是 composer 自动加载的原理解析！
+    
+## php框架
+### Laravel
+#### Laravel生命周期
+    1、Laravel 采用了单一入口模式，应用的所有请求入口都是 public/index.php 文件。
+    2、注册类文件自动加载器 : Laravel通过 composer 进行依赖管理，无需开发者手动导入各种类文件，、
+    而由自动加载器自行导入。
+    3、创建服务容器：从 bootstrap/app.php 文件中取得 Laravel 应用实例 $app (服务容器)
+    创建 HTTP / Console 内核：传入的请求会被发送给 HTTP 内核或者 console 内核进行处理
+    4、载入服务提供者至容器：在内核引导启动的过程中最重要的动作之一就是载入服务提供者到
+    你的应用，服务提供者负责引导启动框架的全部各种组件，例如数据库、队列、验证器以及路由组件。
+    5、分发请求：一旦应用完成引导和所有服务提供者都注册完成，Request 将会移交给路由进行
+    分发。路由将分发请求给一个路由或控制器，同时运行路由指定的中间件
+![RUNOOB 图标](asset/laravel.png)   
+#### Laravel关键特性
+    1.路由
+    2.计划任务
+    3.队列
+    4.脚手架
+    5.控制反转，依赖注入
+#### Laravel中间件实现原理
+    https://learnku.com/articles/5463/laravel-middleware-implementation-principle
+#### Laravel artisan实现原理   
+    https://learnku.com/articles/52949
+### Yii2生命周期
+    1.用户向入口脚本 web/index.php 发起请求。
+    2.入口脚本加载应用配置并创建一个应用 实例去处理请求。
+    3.应用通过请求组件解析请求的 路由。
+    4.应用创建一个控制器实例去处理请求。
+    5.控制器创建一个动作实例并针对操作执行过滤器。
+    6.如果任何一个过滤器返回失败，则动作取消。
+    7.如果所有过滤器都通过，动作将被执行。
+    8.动作会加载一个数据模型，或许是来自数据库。
+    9.动作会渲染一个视图，把数据模型提供给它。
+    10.渲染结果返回给响应组件。
+    11.响应组件发送渲染结果给用户浏览器。
+![RUNOOB 图标](asset/yii.jpg) 
+
+### ThinkPHP生命周期
+![RUNOOB 图标](asset/tp.jpg)  
+
 ## 设计模式
 ### 1.单例模式
     
@@ -272,102 +430,7 @@ nginx如何调用PHP(nginx+php运行原理)
      $shapemark = new ShapeMark();
      $shapemark->drawCircle();
      $shapemark->drawRectangle();
-     $shapemark->drawSquare();`
-## 常见问题
-### 1.static关键字的作用，跟其他的属性有什么区别
-### 2.private,protected,public的区别
-    > private只能在当前类中调用
-    > protected能在当前类中调用也能在子类中调用
-    > public可以到所有类中
-### 3.抽象类，接口的区别
-### 4.依赖注入/控制反转的原理与作用  
-    原理：
-    作用：1.减少系统的耦合度
-          2.减少系统类的创建
-### 5.自动加载原理
-    https://segmentfault.com/a/1190000014948542
-    1.启动
-    <?php
-      define('LARAVEL_START', microtime(true));
-    
-      require __DIR__ . '/../vendor/autoload.php';
-      
-    去 vendor 目录下的 autoload.php ：
-    <?php
-      require_once __DIR__ . '/composer' . '/autoload_real.php';
-    
-      return ComposerAutoloaderInit7b790917ce8899df9af8ed53631a1c29::getLoader();
-      
-    2.Composer自动加载文件
-    3.autoload_real 引导类
-        第一部分——单例
-        第二部分——构造ClassLoader核心类
-        第三部分 —— 初始化核心类对象
-            autoload_static 静态初始化 ( PHP >= 5.6 )
-            classMap（命名空间映射）
-            ClassLoader 接口初始化（ PHP < 5.6 ）
-            命名空间映射
-        第四部分 —— 注册
-            全局函数的自动加载
-            静态初始化：
-            普通初始化
-            加载全局函数
-        第五部分 —— 运行
-        
-    我们通过举例来说下上面代码的流程：
-    如果我们在代码中写下 new phpDocumentor\Reflection\Element()，PHP 会通过 SPL_autoload_register 调用 
-    loadClass -> findFile -> findFileWithExtension。步骤如下：
-    将 \ 转为文件分隔符/，加上后缀php，变成 $logicalPathPsr4, 即 phpDocumentor/Reflection//Element.php;
-    利用命名空间第一个字母p作为前缀索引搜索 prefixLengthsPsr4 数组，查到下面这个数组：
-            p' => 
-                array (
-                    'phpDocumentor\\Reflection\\' => 25,
-                    'phpDocumentor\\Fake\\' => 19,
-              )
-    遍历这个数组，得到两个顶层命名空间 phpDocumentor\Reflection\ 和 phpDocumentor\Fake\
-    在这个数组中查找 phpDocumentor\Reflection\Element，找出 phpDocumentor\Reflection\ 这个顶层命名空间并且长度为25。
-    在prefixDirsPsr4 映射数组中得到phpDocumentor\Reflection\ 的目录映射为：
-        'phpDocumentor\\Reflection\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-                1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-                2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            ),
-    遍历这个映射数组，得到三个目录映射；
-    查看 “目录+文件分隔符//+substr(&dollar;logicalPathPsr4, &dollar;length)”文件是否存在，存在即返回。这里就是
-    '__DIR__/../phpdocumentor/reflection-common/src + substr(phpDocumentor/Reflection/Element.php,25)'
-    如果失败，则利用 fallbackDirsPsr4 数组里面的目录继续判断是否存在文件
-    以上就是 composer 自动加载的原理解析！
-    
-## laravel,yii,thinkphp运行原理
-    Laravel 的生命周期
-    1、Laravel 采用了单一入口模式，应用的所有请求入口都是 public/index.php 文件。
-    2、注册类文件自动加载器 : Laravel通过 composer 进行依赖管理，无需开发者手动导入各种类文件，、
-    而由自动加载器自行导入。
-    3、创建服务容器：从 bootstrap/app.php 文件中取得 Laravel 应用实例 $app (服务容器)
-    创建 HTTP / Console 内核：传入的请求会被发送给 HTTP 内核或者 console 内核进行处理
-    4、载入服务提供者至容器：在内核引导启动的过程中最重要的动作之一就是载入服务提供者到
-    你的应用，服务提供者负责引导启动框架的全部各种组件，例如数据库、队列、验证器以及路由组件。
-    5、分发请求：一旦应用完成引导和所有服务提供者都注册完成，Request 将会移交给路由进行
-    分发。路由将分发请求给一个路由或控制器，同时运行路由指定的中间件
-![RUNOOB 图标](asset/laravel.png)       
- 
-    Yii2生命周期
-    1.用户向入口脚本 web/index.php 发起请求。
-    2.入口脚本加载应用配置并创建一个应用 实例去处理请求。
-    3.应用通过请求组件解析请求的 路由。
-    4.应用创建一个控制器实例去处理请求。
-    5.控制器创建一个动作实例并针对操作执行过滤器。
-    6.如果任何一个过滤器返回失败，则动作取消。
-    7.如果所有过滤器都通过，动作将被执行。
-    8.动作会加载一个数据模型，或许是来自数据库。
-    9.动作会渲染一个视图，把数据模型提供给它。
-    10.渲染结果返回给响应组件。
-    11.响应组件发送渲染结果给用户浏览器。
-![RUNOOB 图标](asset/yii.jpg) 
-
-    ThinkPHP生命周期
-![RUNOOB 图标](asset/tp.jpg)    
+     $shapemark->drawSquare();`  
 ## 算法
 ### 10大排序算法
 #### 1.冒泡排序
@@ -797,10 +860,10 @@ nginx如何调用PHP(nginx+php运行原理)
     1）先删除缓存，再修改数据库
     2）
 ## elk
-### 
+ 
 
 ## rabbimq
-### 
+
 
 ## kafka
     Kafka为什么那么快？
@@ -808,8 +871,7 @@ nginx如何调用PHP(nginx+php运行原理)
     2.顺序写 由于现代的操作系统提供了预读和写技术，磁盘的顺序写大多数情况下比随机写内存还要快。
     3.Zero-copy 零拷技术减少拷贝次数
     4.Batching of Messages 批量量处理。合并小的请求，然后以流的方式进行交互，直顶网络上限。
-    5.Pull 拉模式 使用拉模式进行消息的获取消费，与消费端处理能力相符。
-### 
+    5.Pull 拉模式 使用拉模式进行消息的获取消费，与消费端处理能力相符。 
 
 ## 网络
 ###  同步，异步，阻塞，非阻塞
@@ -981,7 +1043,6 @@ nginx如何调用PHP(nginx+php运行原理)
         使得该目标系统无法提供正常的服务。攻击者进行拒绝服务攻击，实际上让服务器实现两种效果：
         一是迫使服务器的缓冲区满，不接收新的请求；
         二是使用IP欺骗，迫使服务器把合法用户的连接复位，影响合法用户的连接。
-                
     cc攻击(Challenge Collapsar)
         CC攻击的原理是通过代理服务器或者大量肉鸡模拟多个用户访问目标网站的动态页面，制造大量的后台
         数据库查询动作，消耗目标CPU资源，造成拒绝服务。
@@ -989,7 +1050,6 @@ nginx如何调用PHP(nginx+php运行原理)
         DDoS攻击打的是网站的服务器，而CC攻击是针对网站的页面攻击的，用术语来说就是，一个是WEB网络层拒绝服务攻击（DDoS），
         一个是WEB应用层拒绝服务攻击（CC）。CC攻击模拟用户对一些比较消耗资源的网页进行攻击，而DDoS攻击则是针对ip进行攻击，
         两者的危害也是不一样的，DDoS的攻击会比CC攻击更难防御，造的危害会更大
-        https://www.huaweicloud.com/zhishi/dyl86.html
     重放攻击
     ARP欺骗
     IP欺骗
@@ -1003,8 +1063,9 @@ nginx如何调用PHP(nginx+php运行原理)
     SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接
     状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：
     #netstat -nap | grep SYN_RECV  
-    
-    参考地址：https://serverless-action.com/fontend/web-security/
+    参考地址：
+        1.https://serverless-action.com/fontend/web-security/
+        2.https://www.huaweicloud.com/zhishi/dyl86.html
 ## 并发
 ### rps,qps,tps,pv,uv,吞吐量
     rps:代表吞吐率，即 Requests Per Second 的缩写。 
@@ -1026,7 +1087,6 @@ nginx如何调用PHP(nginx+php运行原理)
             2.nginx访问日志
     吞吐量：单位时间内处理的任务数
     https://www.huaweicloud.com/articles/e69c2d94805734d47a5b86d4f70b7d3b.html
-
 ## git
 ### git有哪些主流的工作流
 #### 1.集中式工作流
@@ -1039,3 +1099,15 @@ nginx如何调用PHP(nginx+php运行原理)
 远程仓库作为开发者的交互中心，同时围绕master、release、develop、feature
 feature是统称不止这一个）四种分支协作，完成多环境、多任务的代码管理。
 #### 4.Github工作流
+## 项目
+### ERP系统
+#### 1.erp有哪些功能
+    一、会计核算
+    二、财务管理
+    三、生产控制管理
+    四、物流管理
+    五、采购管理
+    六、分销管理
+    七、库存控制
+    八、人力资源管理
+    
