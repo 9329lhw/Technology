@@ -52,6 +52,13 @@
 	    PHP专门的快速通用网关接口进程管理	
 	    PHP-FPM是一个PHP FastCGI管理器，其实是PHP源代码的一个补丁   
 	参考链接：https://www.biaodianfu.com/cgi-fastcgi-wsgi.html
+#### fastCGI,Nginx之间是什么关系
+    FastCGI 是一个协议，它是应用程序和 WEB 服务器连接的桥梁。
+    Nginx 并不能直接与 PHP-FPM 通信，而是将请求通过 FastCGI 
+    交给 PHP-FPM 处理。
+    参考链接：
+    https://www.cnblogs.com/liyuanhong/articles/11181537.html
+    https://www.cnblogs.com/jianzhaojing/p/13623509.html
 #### php五种运行模式
     
     1.CGI（通用网关接口/ Common Gateway Interface）
