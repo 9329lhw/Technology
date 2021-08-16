@@ -1,7 +1,7 @@
 # php
 ## php基础
 ### 底层原理
-PHP语言的整体架构图(包括其核心的组成模块即可)
+#### PHP语言的整体架构图(包括其核心的组成模块即可)
 
 ![RUNOOB 图标](asset/php.jpg)   
 
@@ -27,29 +27,32 @@ PHP语言的整体架构图(包括其核心的组成模块即可)
     使用它们就可以在请求再次来临时省略前三步。 
     引擎也实现了基本的数据结构、内存分配及管理，提供了相应的 API 方法供外部调用。
     
-PHP的垃圾回收集机制
+#### PHP的垃圾回收集机制
 
     引擎在判断一个变量空间是否能够被释放的时候是依据这个变量的zval的refcount的值，
     如果refcount为0，那么变量的空间可以被释放，否则就不释放，这是一种非常简单的GC实现
 
-CgI、php-cgi、 Fastcgi、 php-fpm 几者的关系
-
-    CGI全称是“公共网关接口”，HTTP服务器与你的或其它机器上的程序进行“交谈”的一种工具，
-    其程序须运行在网络服务器上只要激活后，每次都要花费时间去fork一次
-    
-	FastCGI像是一个常驻(long-live)型的CGI，它可以一直执行着，只要激活后，
-	不会每次都要花费时间去fork一次（这是CGI最为人诟病的fork-and-execute 模式）。
-	它还支持分布式的运算，即 FastCGI 程序可以在网站服务器以外的主机上执行并
-	且接受来自其它网站服务器来的请求。
-	
+#### CgI、php-cgi、 Fastcgi、 php-fpm 几者的关系
+    CGI:(Common Gateway Interface)通用网关接口
+        HTTP服务器与你的或其它机器上的程序进行“交谈”的一种工具，
+        其程序须运行在网络服务器上只要激活后，每次都要花费时间去fork一次
+        缺点：每个请求一个新进程，进程间通信地址空间无法共享，
+        限制了数据库连接、内存缓存等资源的重用。
+    FastCGI:(Fast Common Gateway Interfac)快速通用网关接口
+        FastCGI像是一个常驻(long-live)型的CGI，它可以一直执行着，只要激活后，
+        不会每次都要花费时间去fork一次（这是CGI最为人诟病的fork-and-execute 模式）。
+        它还支持分布式的运算，即 FastCGI 程序可以在网站服务器以外的主机上执行并
+        且接受来自其它网站服务器来的请求。
 	PHP-CGI是PHP自带的FastCGI管理器	
-	php-cgi变更php.ini配置后需重启php-cgi才能让新的php-ini生效，不可以平滑重启。
-	直接杀死php-cgi进程，php就不能运行了。(PHP-FPM和Spawn-FCGI就没有这个问题，
-	守护进程会平滑从新生成新的子进程。）
-		
-	PHP-FPM是一个PHP FastCGI管理器，其实是PHP源代码的一个补丁   
-	
-php五种运行模式
+        PHP-CGI的不足：
+        1.php-cgi变更php.ini配置后需重启php-cgi才能让新的php-ini生效，不可以平滑重启。
+        2.直接杀死php-cgi进程，php就不能运行了。(PHP-FPM和Spawn-FCGI就没有这个问题，
+        守护进程会平滑从新生成新的子进程。）
+	PHP-FPM:(PHP-FastCGI Process Manager)
+	    PHP专门的快速通用网关接口进程管理	
+	    PHP-FPM是一个PHP FastCGI管理器，其实是PHP源代码的一个补丁   
+	参考链接：https://www.biaodianfu.com/cgi-fastcgi-wsgi.html
+#### php五种运行模式
     
     1.CGI（通用网关接口/ Common Gateway Interface）
     2.FastCGI（常驻型CGI / Long-Live CGI）
@@ -57,9 +60,7 @@ php五种运行模式
     4.Web模块模式（Apache等Web服务器运行的模式） 
     5.ISAPI（Internet Server Application Program Interface）
 
-nginx如何调用PHP(nginx+php运行原理)
-
-    https://www.cnblogs.com/echojson/p/10830302.html
+#### nginx如何调用PHP(nginx+php运行原理)
     1、nginx的worker进程直接管理每一个请求到nginx的网络请求。
     2、对于php而言，由于在整个网络请求的过程中php是一个cgi程序的角色，所以采用名为php-fpm的进程管理程序来对这些被请求的php程序进行管理。php-fpm程序也如同nginx一样，需要监听端口，并且有master和worker进程。worker进程直接管理每一个php进程。
     3、关于fastcgi：fastcgi是一种进程管理器，管理cgi进程。市面上有多种实现了fastcgi功能的进程管理器，php-fpm就是其中的一种。再提一点，php-fpm作为一种fast-cgi进程管理服务，会监听端口，一般默认监听9000端口，并且是监听本机，也就是只接收来自本机的
@@ -70,6 +71,26 @@ nginx如何调用PHP(nginx+php运行原理)
     fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
     我们可以打开fastcgi_parames文件加上上述行，也可以在要使用配置的地方动态添加。使得该配置生效。
     5、当需要处理php请求时，nginx的worker进程会将请求移交给php-fpm的worker进程进行处理，也就是最开头所说的nginx调用了php，其实严格得讲是nginx间接调用php。
+#### 从浏览器输入URL到页面解析的全过程
+    1.输入网址
+    输入要访问的网址，即URL
+    2.缓存解析
+    浏览器获取URL后，先去缓存中查找资源，从浏览器缓存-系统缓存-路由器缓存中查看；
+    如果有就从缓存中显示界面，不再发送请求；
+    如果没有，则发送http请求；
+    3.域名解析
+    发现缓存中没有资源，发送http请求；
+    在发送http请求之前，需要进行DNS解析(域名解析)；
+    DNS解析：域名到IP地址的转换过程，域名的解析工作由DNS服务器完成，解析后可以获取域名相应的IP地址；
+    4.tcp连接，三次握手
+    在域名解析后，浏览器向服务器发起了http请求，tcp连接；
+    因为tcp协议时面向连接的，所以在传输数据前必须建立连接，即三次握手；
+    tcp连接建立后，浏览器开始向服务器发送http请求，请求数据包。请求信息包含一个头部和一个请求体；
+    5.服务器收到请求
+    服务器收到浏览器发送的请求信息，返回一个响应头和一个响应体。
+    6.页面渲染
+    浏览器收到服务器发送的响应头和响应体，进行客户端渲染,生成Dom树，解析css样式,js交互。
+    参考地址：https://www.geek-share.com/detail/2796178796.html
 ### 常见函数
     array_pop() 删除数组的最后一个元素（出栈）。
     array_push() 将一个或多个元素插入数组的末尾（入栈）。
@@ -859,6 +880,7 @@ nginx如何调用PHP(nginx+php运行原理)
     4.缓存与数据库双写一致性
     1）先删除缓存，再修改数据库
     2）
+    参考链接：http://kaito-kidd.com/2021/01/23/redis-slow-latency-analysis/
 ## elk
  
 
@@ -1124,3 +1146,4 @@ feature是统称不止这一个）四种分支协作，完成多环境、多任�
     七、库存控制
     八、人力资源管理
     
+### SaaS平台(Software as a service，软件即服务)
