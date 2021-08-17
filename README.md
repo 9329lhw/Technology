@@ -5,7 +5,8 @@
 
 ![RUNOOB 图标](asset/php.jpg)   
 
-    Application: 程序员编写的 PHP 程序，无论是 Web 应用还是 Cli 方式运行的应用都是上层应用，PHP 程序员主要工作就是编写它们。 
+    Application: 程序员编写的 PHP 程序，无论是 Web 应用还是 Cli 方式运行的应用都是上层应用，
+    PHP 程序员主要工作就是编写它们。 
     
     SAPI:SAPI 是 Server Application Programming Interface 的缩写，中文为服务端应用编程接口，
     它通过一系列钩子函数使得 PHP 可以和外 围交换数据，SAPI 就是 PHP 和外部环境的代理器，
@@ -69,15 +70,22 @@
 
 #### nginx如何调用PHP(nginx+php运行原理)
     1、nginx的worker进程直接管理每一个请求到nginx的网络请求。
-    2、对于php而言，由于在整个网络请求的过程中php是一个cgi程序的角色，所以采用名为php-fpm的进程管理程序来对这些被请求的php程序进行管理。php-fpm程序也如同nginx一样，需要监听端口，并且有master和worker进程。worker进程直接管理每一个php进程。
-    3、关于fastcgi：fastcgi是一种进程管理器，管理cgi进程。市面上有多种实现了fastcgi功能的进程管理器，php-fpm就是其中的一种。再提一点，php-fpm作为一种fast-cgi进程管理服务，会监听端口，一般默认监听9000端口，并且是监听本机，也就是只接收来自本机的
+    2、对于php而言，由于在整个网络请求的过程中php是一个cgi程序的角色，所以采用名为php-fpm的进程管理
+    程序来对这些被请求的php程序进行管理。php-fpm程序也如同nginx一样，需要监听端口，并且有master和
+    worker进程。worker进程直接管理每一个php进程。
+    3、关于fastcgi：fastcgi是一种进程管理器，管理cgi进程。市面上有多种实现了fastcgi功能的进程管理器，
+    php-fpm就是其中的一种。再提一点，php-fpm作为一种fast-cgi进程管理服务，会监听端口，一般默认监
+    听9000端口，并且是监听本机，也就是只接收来自本机的
     端口请求，所以我们通常输入命令 netstat -nlpt|grep php-fpm 会得到：
-    1   tcp        0      0 127.0.0.1:9000              0.0.0.0:*                   LISTEN      1057/php-fpm
+    1   tcp 0  0 127.0.0.1:9000   0.0.0.0:*    LISTEN    1057/php-fpm
     这里的127.0.0.1:9000 就是监听本机9000端口的意思。
-    4、关于fastcgi的配置文件，目前fastcgi的配置文件一般放在nginx.conf同级目录下，配置文件形式，一般有两种：fastcgi.conf  和 fastcgi_params。不同的nginx版本会有不同的配置文件，这两个配置文件有一个非常重要的区别：fastcgi_parames文件中缺少下列配置：
+    4、关于fastcgi的配置文件，目前fastcgi的配置文件一般放在nginx.conf同级目录下，配置文件形式，
+    一般有两种：fastcgi.conf  和 fastcgi_params。不同的nginx版本会有不同的配置文件，这两个配置文
+    件有一个非常重要的区别：fastcgi_parames文件中缺少下列配置：
     fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
     我们可以打开fastcgi_parames文件加上上述行，也可以在要使用配置的地方动态添加。使得该配置生效。
-    5、当需要处理php请求时，nginx的worker进程会将请求移交给php-fpm的worker进程进行处理，也就是最开头所说的nginx调用了php，其实严格得讲是nginx间接调用php。
+    5、当需要处理php请求时，nginx的worker进程会将请求移交给php-fpm的worker进程进行处理，也就是最
+    开头所说的nginx调用了php，其实严格得讲是nginx间接调用php。
 #### 从浏览器输入URL到页面解析的全过程
     1.输入网址
     输入要访问的网址，即URL
@@ -205,9 +213,11 @@
         第五部分 —— 运行
         
     我们通过举例来说下上面代码的流程：
-    如果我们在代码中写下 new phpDocumentor\Reflection\Element()，PHP 会通过 SPL_autoload_register 调用 
-    loadClass -> findFile -> findFileWithExtension。步骤如下：
-    将 \ 转为文件分隔符/，加上后缀php，变成 $logicalPathPsr4, 即 phpDocumentor/Reflection//Element.php;
+    如果我们在代码中写下 new phpDocumentor\Reflection\Element()，PHP 会通过
+     SPL_autoload_register 调用 loadClass -> findFile -> findFileWithExtension。
+     步骤如下：
+    将 \ 转为文件分隔符/，加上后缀php，变成 $logicalPathPsr4, 
+    即 phpDocumentor/Reflection//Element.php;
     利用命名空间第一个字母p作为前缀索引搜索 prefixLengthsPsr4 数组，查到下面这个数组：
             p' => 
                 array (
@@ -215,8 +225,9 @@
                     'phpDocumentor\\Fake\\' => 19,
               )
     遍历这个数组，得到两个顶层命名空间 phpDocumentor\Reflection\ 和 phpDocumentor\Fake\
-    在这个数组中查找 phpDocumentor\Reflection\Element，找出 phpDocumentor\Reflection\ 这个顶层命名空间并且长度为25。
-    在prefixDirsPsr4 映射数组中得到phpDocumentor\Reflection\ 的目录映射为：
+    在这个数组中查找 phpDocumentor\Reflection\Element，找出 phpDocumentor\Reflection\ 
+    这个顶层命名空间并且长度为25。在prefixDirsPsr4 映射数组中得到phpDocumentor\Reflection\ 
+    的目录映射为：
         'phpDocumentor\\Reflection\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
@@ -224,10 +235,10 @@
                 2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             ),
     遍历这个映射数组，得到三个目录映射；
-    查看 “目录+文件分隔符//+substr(&dollar;logicalPathPsr4, &dollar;length)”文件是否存在，存在即返回。这里就是
-    '__DIR__/../phpdocumentor/reflection-common/src + substr(phpDocumentor/Reflection/Element.php,25)'
-    如果失败，则利用 fallbackDirsPsr4 数组里面的目录继续判断是否存在文件
-    以上就是 composer 自动加载的原理解析！
+    查看 “目录+文件分隔符//+substr(&dollar;logicalPathPsr4, &dollar;length)”文件是否存在，
+    存在即返回。这里就是'__DIR__/../phpdocumentor/reflection-common/src + substr(phpDocumentor
+    /Reflection/Element.php,25)'如果失败，则利用 fallbackDirsPsr4 数组里面的目录继续判断
+    是否存在文件以上就是 composer 自动加载的原理解析！
     
 ## php框架
 ### Laravel
@@ -630,8 +641,8 @@
         情况会产生大量的死锁造成系统性能问题
         
     四、前段针对秒杀的优化
-        首先要有一个展示秒杀商品的页面，在这个页面上做一个秒杀活动开始的倒计时，在准备阶段内用户会陆续打
-        开这个秒杀的页面， 并且可能不停的刷新页面。这里需要考虑两个问题：
+        首先要有一个展示秒杀商品的页面，在这个页面上做一个秒杀活动开始的倒计时，在准备阶段内用
+        户会陆续打开这个秒杀的页面， 并且可能不停的刷新页面。这里需要考虑两个问题：
         1.秒杀前按钮是灰的，不能发送请求， 当然后端肯定也是要有判断。
         2.产品层面，用户点击“查询”或者“购票”后，按钮置灰，禁止用户重复提交请求;
         3.JS层面，限制用户在x秒之内只能提交一次请求;
@@ -639,10 +650,10 @@
 ## mysql
 ### 1.mysql基础整理
 #### 1.1 回表(查询某个字段时是先查的主键然后再得出查询结果)
-    https://blog.csdn.net/weixin_39554021/article/details/113144490?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.control&spm=1001.2101.3001.4242
     即先定位主键值，再根据主键值定位行记录，性能相对于只扫描一遍聚集索引树的性能要低一些。
 #### 1.1 索引覆盖
-    索引覆盖是一种避免回表查询的优化策略。具体的做法就是将要查询的数据作为索引列建立普通索引(可以是单列索引，也可以是联合索引)，
+    索引覆盖是一种避免回表查询的优化策略。具体的做法就是将要查询的数据作为索引列建立普通索引
+    (可以是单列索引，也可以是联合索引)，
     这样的话就可以直接返回索引中的的数据，不需要再通过聚集索引去定位行记录，避免了回表的情况发生。    
 ### mysql事务隔离级别
 #### 1.Read Uncommitted(读取未提交内容)
@@ -653,7 +664,8 @@
     (1)这是大多数数据库系统的默认隔离级别（但不是MySQL默认的） 
     (2)它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变 
     (3)这种隔离级别出现的问题是——不可重复读(Nonrepeatable Read)：不可重复读意味着
-    我们在同一个事务中执行完全相同的select语句时可能看到不一样的结果。 |——>导致这种情况的原因可能有：
+    我们在同一个事务中执行完全相同的select语句时可能看到不一样的结果。
+    导致这种情况的原因可能有：
     (1)有一个交叉的事务有新的commit，导致了数据的改变;
     (2)一个数据库被多个实例操作时,同一事务的其他实例在该实例处理其间可能会有新的commit
 #### 3.Repeatable Read(可重读)
@@ -763,9 +775,11 @@
 ### 分布式事务
 	https://www.cnblogs.com/jajian/p/10014145.html
 	xa事务
-	2pc(两阶段提交)：第一次提交时准备操作，第二次提交时真正的提交-------------->产生的问题：数据不一致
-    	3pc(三阶段提交)：在2pc的基础上多了一次消息通知的阶段住要 第一次提交完了通知第二次进行提交--------->mysql官方暂时未实现
-    	tcc(TCC两阶段补偿型)：在2pc的基础上使用接口来处理事务的回滚操作
+	2pc(两阶段提交)：第一次提交时准备操作，第二次提交时真正的提交
+	-------------->产生的问题：数据不一致
+    3pc(三阶段提交)：在2pc的基础上多了一次消息通知的阶段住要 第一次提交完了通知第二次进行提交
+    	--------->mysql官方暂时未实现
+    tcc(TCC两阶段补偿型)：在2pc的基础上使用接口来处理事务的回滚操作
 	mq(最终一致性，幂等性)：使用rabbit ack高级特性
 ## 分布式事务行业主要解决方案介绍
 #### 两阶段提交（2PC）（two-phase commit protocol）
@@ -785,8 +799,9 @@
     Try阶段：主要是对业务系统做检测及资源预留。
     Confirm阶段：确认执行业务操作。 通过调用确认接口
     Cancel阶段：取消执行业务操作。 通过调用取消接口
-    不足之处则在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现try、confirm、cancel三个操作。此外，
-    其实现难度也比较大，需要按照网络状态、系统故障等不同的失败原因实现不同的回滚策略
+    不足之处则在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现try、confirm、cancel
+    三个操作。此外，其实现难度也比较大，需要按照网络状态、系统故障等不同的失败原因实现
+    不同的回滚策略
 #### MQ最终一致性事务
     1 消息百分百投递成功
     结合comfirm机制
@@ -850,9 +865,10 @@
 ### 哨兵原理
     
     1.检测问题，主要讲的是三个定时任务，这三个内部的执行任务可以保证出现问题马上让 Sentinel 知道。 
-    2.发现问题，主要讲的是主观下线和客观下线。当有一台 Sentinel 机器发现问题时，它就会主观对它主观下线。 
-    但是当多个 Sentinel 都发现有问题的时候，才会出现客观下线。 
-    3.找到解决问题的人，主要讲的是领导者选举，如何在 Sentinel 内部多台节点做领导者选举，选出一个领导者。 
+    2.发现问题，主要讲的是主观下线和客观下线。当有一台 Sentinel 机器发现问题时，它就会主观对它主
+    观下线。但是当多个 Sentinel 都发现有问题的时候，才会出现客观下线。 
+    3.找到解决问题的人，主要讲的是领导者选举，如何在 Sentinel 内部多台节点做领导者选举，选出一个
+    领导者。 
     4.解决问题，主要讲的是故障转移，即如何进行故障转移
         1. 三个定时任务
         每10秒每个 Sentinel 对 Master 和 Slave 执行一次 Info Replication 。 
@@ -860,9 +876,9 @@
         每1秒每个 Sentinel 对其他 Sentinel 和 Redis 执行 pin 
         第一个定时任务，指的是 Redis Sentinel 可以对 Redis 节点做失败判断和故障转移，在 Redis 内部有
         三个定时任务作为基础，来 Info Replication 发现 Slave 节点， 这个命令可以确定主从关系。 
-        第二个定时任务，类似于发布订阅， Sentinel 会对主从关系进行判定，通过 sentinel:hello 频道交互。了解
-        主从关系可以帮助更好的自动化操作 Redis 。然后 Sentinel 会告知系统消息给其它 Sentinel 节点，最终达到共识，
-        同时 Sentinel节点能够互相感知到对方。 
+        第二个定时任务，类似于发布订阅， Sentinel 会对主从关系进行判定，通过 sentinel:hello 频道交互。
+        了解主从关系可以帮助更好的自动化操作 Redis 。然后 Sentinel 会告知系统消息给其它 Sentinel 节点，
+        最终达到共识，同时 Sentinel节点能够互相感知到对方。 
         第三个定时任务，指的是对每个节点和其它 Sentinel 进行心跳检测，它是失败判定的依据
 ### 集群
 #### 集群的几种方式（https://blog.csdn.net/drdongshiye/article/details/84204392）
@@ -1014,7 +1030,9 @@
 	2.FIFO：任何进程间都能通讯，但速度慢    
 	3.消息队列：容量受到系统限制，且要注意第一次读的时候，要考虑上一次没有读完数据的问题    
 	4.信号量：不能传递复杂消息，只能用来同步    
-	5.共享内存区：能够很容易控制容量，速度快，但要保持同步，比如一个进程在写的时候，另一个进程要注意读写的问题，相当于线程中的线程安全，当然，共享内存区同样可以用作线程间通讯，不过没这个必要，线程间本来就已经共享了同一进程内的一块内存
+	5.共享内存区：能够很容易控制容量，速度快，但要保持同步，比如一个进程在写的时候，另一个进程
+	要注意读写的问题，相当于线程中的线程安全，当然，共享内存区同样可以用作线程间通讯，不过没
+	这个必要，线程间本来就已经共享了同一进程内的一块内存
 ### http常见状态码
     301 moved permanently 永久重定向，将用户的访问，重定向到某个url，
     当访问忘记最后加/,将301
@@ -1080,8 +1098,10 @@
     文件上传
         上传问题防御:
             限制上传后缀
-            文件类型检查：通过mime判断文件类型，不是完全可靠的，是通过浏览器提供的，攻击者可以绕过浏览器发起请求，伪造mime
-            文件内容检查：文件内容的二进制数据前几位是有一定特征的，根据这个特征可以判断文件类型，比根据mime更可靠
+            文件类型检查：通过mime判断文件类型，不是完全可靠的，是通过浏览器提供的，攻击者可以绕
+            过浏览器发起请求，伪造mime
+            文件内容检查：文件内容的二进制数据前几位是有一定特征的，根据这个特征可以判断文件类型，
+            比根据mime更可靠
             程序输出：程序读取源文件，直接输出，不执行，比上面的可靠
             权限控制原则-可写可执行互斥：设置文件权限，上传的文件目录可写，但是不可执行
     dos攻击：分布式拒绝服务(DDoS:Distributed Denial of Service)
@@ -1093,8 +1113,10 @@
         CC攻击的原理是通过代理服务器或者大量肉鸡模拟多个用户访问目标网站的动态页面，制造大量的后台
         数据库查询动作，消耗目标CPU资源，造成拒绝服务。
     DDoS攻击与CC攻击的区别
-        DDoS攻击打的是网站的服务器，而CC攻击是针对网站的页面攻击的，用术语来说就是，一个是WEB网络层拒绝服务攻击（DDoS），
-        一个是WEB应用层拒绝服务攻击（CC）。CC攻击模拟用户对一些比较消耗资源的网页进行攻击，而DDoS攻击则是针对ip进行攻击，
+        DDoS攻击打的是网站的服务器，而CC攻击是针对网站的页面攻击的，用术语来说就是，一个是WEB网络
+        层拒绝服务攻击（DDoS），
+        一个是WEB应用层拒绝服务攻击（CC）。CC攻击模拟用户对一些比较消耗资源的网页进行攻击，而DDoS
+        攻击则是针对ip进行攻击，
         两者的危害也是不一样的，DDoS的攻击会比CC攻击更难防御，造的危害会更大
     重放攻击
     ARP欺骗
