@@ -819,9 +819,10 @@
     6. 使其他的slave连接新的master进行复制；
 
 ## redis
-### redis list,hash,使用比较慢的命令为什么慢
+### redis list,hash,set使用比较慢的命令为什么慢
+    hgetall、lrange、smembers、zrange
+    参考链接：https://juejin.cn/post/6855129005172097031#heading-3
 ### redis为什么那么快
-    
     1.完全基于内存
     2.数据结构简单
     3.采用单线程避免
