@@ -182,7 +182,7 @@
     2.手机号
     "/^1(3|4|5|6|7|8|9)\d{9}$/"; 
     
- ![参考链接：](https://note.youdao.com/web/#/file/WEBd9fc02df9ec171264d86a28097fb9c6d/note/WEBfc04a8cadd692426e6b7e6357900ec17/)
+ [参考链接：https://note.youdao.com](https://note.youdao.com/web/#/file/WEBd9fc02df9ec171264d86a28097fb9c6d/note/WEBfc04a8cadd692426e6b7e6357900ec17/)
 ### 常见问题
 ### 4.依赖注入/控制反转的原理与作用  
     原理：
