@@ -289,14 +289,17 @@
     1、渲染模版方式的不同:
     在Laravel框架里,使用return view()来渲染模版;
     而ThinkPHP里则使用了$this- display()的方式渲染模版;
-    2、在Laravel框架里,由于其考虑到了跨站请求伪造, 所以如果使用form表单以post方式进行传值时,如果不再form表单中加入{{csrf_field()}}则会报出TokenMethodnotfound的语法错误;
+    2、在Laravel框架里,由于其考虑到了跨站请求伪造, 所以如果使用form表单以post方式进行传值时,
+    如果不再form表单中加入{{csrf_field()}}则会报出TokenMethodnotfound的语法错误;
     而TP框架则需要自己手动完成防止跨站攻击的代码;
-    3、Laravel是一个重路由的框架(5.4),所有的功能都是由路由发起的,哪怕没有控制器方法,只要写了路由就能够访问,thinkPHP(3.2),必须要有控制器方法才能正常访问;
+    3、Laravel是一个重路由的框架(5.4),所有的功能都是由路由发起的,哪怕没有控制器方法,只要写了
+    路由就能够访问,thinkPHP(3.2),必须要有控制器方法才能正常访问;
     4、laravel具有强大的社区化扩展，（composer扩展自动加载）;
     5、laravel具有强大的Blade模版引擎;
     6、中间件，Laravel特点，可以实现访问前后的处理，例如请求和返回，权限认证等;
     7、条件判断语句书写方式的差异:
-    Laravel框架里 if else判断语句和foreach语句 书写时必须以@if开头 以@endif结尾,如果没有则报语法错误,@foreach @endforeach同理;
+    Laravel框架里 if else判断语句和foreach语句 书写时必须以@if开头 以@endif结尾,如果没有则报
+    语法错误,@foreach @endforeach同理;
     而TP框架则和PHP语法规则使用方式一致直接ifesle语句判断和foreach循环遍历
     参考链接：https://cloud.tencent.com/developer/article/1723045
 ## 设计模式
@@ -945,7 +948,109 @@
     3.Zero-copy 零拷技术减少拷贝次数
     4.Batching of Messages 批量量处理。合并小的请求，然后以流的方式进行交互，直顶网络上限。
     5.Pull 拉模式 使用拉模式进行消息的获取消费，与消费端处理能力相符。 
-
+## 常用Linux命令
+    1.查看物理CPU个数
+    cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
+    2.杀死全部php进程
+    ps -ef | grep php | grep -v grep | awk '{print $2}' | xargs kill -s 9
+    统计IP访问量
+    awk '{print $1}' access.log | sort -n | uniq | wc -l
+    查看访问最频繁的前100个IP
+    awk '{print $1}' access.log | sort -n |uniq -c | sort -rn | head -n 100
+    查看访问100次以上的IP
+    awk '{print $1}' access.log | sort -n |uniq -c |awk '{if($1 >100) print $0}'|sort -rn
+    参考链接：https://www.huaweicloud.com/articles/27a1172e6c9e7bab6555fda4fb0d7825.html
+## 基于php的socket编程
+    socket_create($net参数1，$stream参数2，$protocol参数3)
+    作用：创建一个socket套接字，说白了，就是一个网络数据流。
+    socket_connect($socket参数1,$ip参数2,$port参数3)
+    作用：连接一个套接字，返回值为true或者false
+    socket_bind($socket参数1,$ip参数2,$port参数3)
+    作用：绑定一个套接字，返回值为true或者false
+    socket_listen($socket参数1,$backlog 参数2)
+    作用：监听一个套接字，返回值为true或者false
+    socket_accept($socket)
+    作用：接收套接字的资源信息，成功返回套接字的信息资源，失败为false
+    socket_read($socket参数1,$length参数2)
+    作用：读取套接字的资源信息，
+    socket_write($socket参数1，$msg参数2，$strlen参数3)
+    作用：把数据写入套接字中
+    socket_close($socket)
+    作用：关闭套接字
+    
+    服务端
+    	<?php
+    	//创建服务端的socket套接流,net协议为IPv4，protocol协议为TCP
+    	$socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+    
+    		/*绑定接收的套接流主机和端口,与客户端相对应*/
+    		if(socket_bind($socket,'127.0.0.1',8888) == false){
+    			echo 'server bind fail:'.socket_strerror(socket_last_error());
+    			/*这里的127.0.0.1是在本地主机测试，你如果有多台电脑，可以写IP地址*/
+    		}
+    		//监听套接流
+    		if(socket_listen($socket,4)==false){
+    			echo 'server listen fail:'.socket_strerror(socket_last_error());
+    		}
+    	//让服务器无限获取客户端传过来的信息
+    	do{
+    		/*接收客户端传过来的信息*/
+    		$accept_resource = socket_accept($socket);
+    		/*socket_accept的作用就是接受socket_bind()所绑定的主机发过来的套接流*/
+    
+    		if($accept_resource !== false){
+    			/*读取客户端传过来的资源，并转化为字符串*/
+    			$string = socket_read($accept_resource,1024);
+    			/*socket_read的作用就是读出socket_accept()的资源并把它转化为字符串*/
+    
+    			echo 'server receive is :'.$string.PHP_EOL;//PHP_EOL为php的换行预定义常量
+    			if($string != false){
+    				$return_client = 'server receive is : '.$string.PHP_EOL;
+    				/*向socket_accept的套接流写入信息，也就是回馈信息给socket_bind()所绑定的主机客户端*/
+    				socket_write($accept_resource,$return_client,strlen($return_client));
+    				/*socket_write的作用是向socket_create的套接流写入信息，或者向socket_accept的套接流写入信息*/
+    			}else{
+    				echo 'socket_read is fail';
+    			}
+    		/*socket_close的作用是关闭socket_create()或者socket_accept()所建立的套接流*/
+    			socket_close($accept_resource);
+    		}
+    	}while(true);
+    	socket_close($socket);
+    	
+    	客户端
+    	<?php
+    	//创建一个socket套接流
+        $socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+        /****************设置socket连接选项，这两个步骤你可以省略*************/
+         //接收套接流的最大超时时间1秒，后面是微秒单位超时时间，设置为零，表示不管它
+        socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array("sec" => 1, "usec" => 0));
+         //发送套接流的最大超时时间为6秒
+        socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array("sec" => 6, "usec" => 0));
+        /****************设置socket连接选项，这两个步骤你可以省略*************/
+    
+        //连接服务端的套接流，这一步就是使客户端与服务器端的套接流建立联系
+        if(socket_connect($socket,'127.0.0.1',8888) == false){
+            echo 'connect fail massege:'.socket_strerror(socket_last_error());
+        }else{
+            $message = 'l love you 我爱你 socket';
+            //转为GBK编码，处理乱码问题，这要看你的编码情况而定，每个人的编码都不同
+            $message = mb_convert_encoding($message,'GBK','UTF-8');
+            //向服务端写入字符串信息
+    
+            if(socket_write($socket,$message,strlen($message)) == false){
+                echo 'fail to write'.socket_strerror(socket_last_error());
+    
+            }else{
+                echo 'client write success'.PHP_EOL;
+                //读取服务端返回来的套接流信息
+                while($callback = socket_read($socket,1024)){
+                    echo 'server return message is:'.PHP_EOL.$callback;
+                }
+            }
+        }
+        socket_close($socket);//工作完毕，关闭套接流
+        
 ## 网络
 ###  同步，异步，阻塞，非阻塞
     同步：就是在发出一个功能调用时，在没有得到结果之前，该调用就不返回。
@@ -1066,22 +1171,47 @@
     400 bad request 请求中有错误语法
     403 forbidden 访问被服务器拒绝，包括文件权限，防火墙等等
     404 not found 没有找到要访问资源
+    407 Proxy Authentication Required(要求进行代理认证) 与状态码401类似， 
+    用于需要进行认证的代理服务器
     408 Request Timeout（请求超时）如果客户端完成请求时花费的时间太长， 
     服务器可以回送这个状态码并关闭连接
     409 Conflict（冲突）发出的请求在资源上造成了一些冲突
-    407 Proxy Authentication Required(要求进行代理认证) 与状态码401类似， 
-    用于需要进行认证的代理服务器
     500 internel erver error 服务端执行请求时发生错误，可能web应用端存在bug
     502 Bad Gateway（网关故障）
-    		1.代理使用的服务器遇到了上游的无效响应
-    		2.若代理服务器+真实服务器，大部分情况下是真实服务器返回的请求失败，
-    		代理服务器才返回502
+    	1.代理使用的服务器遇到了上游的无效响应
+    	2.若代理服务器+真实服务器，大部分情况下是真实服务器返回的请求失败，
+    	代理服务器才返回502
     503 service unavailable 服务器暂时属于超负载或者正在停机维护，无法处理请求。
     504 Gateway Time-out PHP-CGI已经执行，但是由于某种原因(一般是读取资源的问题)
     没有执行完毕而导致PHP-CGI进程终止。
+    参考链接：https://tool.oschina.net/commons?type=5
+### http常见响应头信息
+    Content-Encoding
+    Content-Length
+    Content-Type
+        几种常见的Content-Type类型
+        一、application/x-www-form-urlencoded
+        二、multipart/form-data
+        三、application/json
+        四、text/xml
+        五、binary(application/octet-stream)
+    Date
+    Expires
+    Last-Modified
+### http常见请求头信息 
+    Connection: keep-alive
+    Host: api.olightstore.com
+    Origin: https://www.olightstore.com
+    Referer: https://www.olightstore.com/
+    User-Agent: Mozilla/5.0 
 ### 常用的信号量
-    SIGKILL 9 终止进程 杀死进程/关闭进程（暴力关闭）
-    SIGUSR1 10 终止进程 用户定义信号1 
+    1 SIGHUP 重新使进程读取配置文件
+    2 SIGINT 关闭进程（十分暴力关闭）
+    9 SIGKILL 终止进程 杀死进程/关闭进程（暴力关闭）
+    10 SIGUSR1 终止进程 用户定义信号1 
+    15 SIGTERM 关闭进程 (正常关闭)
+    18 SIGCONT 恢复进程运行，相当于 bg 命令
+    19 SIGSTOP 挂机进程，相当于ctrl+z
 ### 网络安全
     xss跨站脚本攻击
         通过表单注入js代码，当数据被执行的时候，跨域获取网站的数据
@@ -1191,6 +1321,13 @@
 远程仓库作为开发者的交互中心，同时围绕master、release、develop、feature
 feature是统称不止这一个）四种分支协作，完成多环境、多任务的代码管理。
 #### 4.Github工作流
+### git少见但很实用的命令
+#### reset,revert
+#### rebase
+    冲突合并
+#### cherry-pick
+    "挑拣"提交
+    参考链链接：https://www.jianshu.com/p/231b80486641
 ## 项目
 ### ERP系统
 #### 1.erp有哪些功能
