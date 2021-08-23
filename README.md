@@ -1,6 +1,12 @@
 # php
 ## php基础
 ### 底层原理
+#### PHP一次请求的生命周期
+    第一阶段：SAPI接口,模块初始化阶段
+    第二阶段：请求初始化阶段
+    第三阶段：php脚本执行阶段
+    第四阶段：请求结束阶段
+    参考链接：http://www.noobyard.com/article/p-haihkowd-vn.html
 #### PHP语言的整体架构图(包括其核心的组成模块即可)
 
 ![RUNOOB 图标](asset/php.jpg)   
@@ -32,7 +38,7 @@
 
     引擎在判断一个变量空间是否能够被释放的时候是依据这个变量的zval的refcount的值，
     如果refcount为0，那么变量的空间可以被释放，否则就不释放，这是一种非常简单的GC实现
-
+    参考链接：https://cloud.tencent.com/developer/article/1723827
 #### CgI、php-cgi、 Fastcgi、 php-fpm 几者的关系
     CGI:(Common Gateway Interface)通用网关接口
         HTTP服务器与你的或其它机器上的程序进行“交谈”的一种工具，
@@ -67,7 +73,6 @@
     3.CLI（命令行运行 / Command Line Interface）
     4.Web模块模式（Apache等Web服务器运行的模式） 
     5.ISAPI（Internet Server Application Program Interface）
-
 #### nginx如何调用PHP(nginx+php运行原理)
     1、nginx的worker进程直接管理每一个请求到nginx的网络请求。
     2、对于php而言，由于在整个网络请求的过程中php是一个cgi程序的角色，所以采用名为php-fpm的进程管理
@@ -280,6 +285,20 @@
 ### ThinkPHP生命周期
 ![RUNOOB 图标](asset/tp.jpg)  
 
+### 浅谈laravel框架与thinkPHP框架的区别
+    1、渲染模版方式的不同:
+    在Laravel框架里,使用return view()来渲染模版;
+    而ThinkPHP里则使用了$this- display()的方式渲染模版;
+    2、在Laravel框架里,由于其考虑到了跨站请求伪造, 所以如果使用form表单以post方式进行传值时,如果不再form表单中加入{{csrf_field()}}则会报出TokenMethodnotfound的语法错误;
+    而TP框架则需要自己手动完成防止跨站攻击的代码;
+    3、Laravel是一个重路由的框架(5.4),所有的功能都是由路由发起的,哪怕没有控制器方法,只要写了路由就能够访问,thinkPHP(3.2),必须要有控制器方法才能正常访问;
+    4、laravel具有强大的社区化扩展，（composer扩展自动加载）;
+    5、laravel具有强大的Blade模版引擎;
+    6、中间件，Laravel特点，可以实现访问前后的处理，例如请求和返回，权限认证等;
+    7、条件判断语句书写方式的差异:
+    Laravel框架里 if else判断语句和foreach语句 书写时必须以@if开头 以@endif结尾,如果没有则报语法错误,@foreach @endforeach同理;
+    而TP框架则和PHP语法规则使用方式一致直接ifesle语句判断和foreach循环遍历
+    参考链接：https://cloud.tencent.com/developer/article/1723045
 ## 设计模式
 ### 1.单例模式
     
@@ -764,6 +783,8 @@
     1. pt-table-checksum 负责检测MySQL主从数据一致性 
     2. pt-table-sync负责挡住从数据不一致时修复数据，让他们保存数据的一致性 
     3. pt-heartbeat 负责监控MySQL主从同步延迟
+    
+    https://www.huaweicloud.com/articles/508e95b7494d24b6f70a1621b63c5567.html
 ### 分库分表
     垂直分库
     水平分库
@@ -819,6 +840,8 @@
     6. 使其他的slave连接新的master进行复制；
 
 ## redis
+### redis 与 memcached对比
+    https://cloud.tencent.com/developer/article/1004377
 ### redis list,hash,set使用比较慢的命令为什么慢
     hgetall、lrange、smembers、zrange
     参考链接：https://juejin.cn/post/6855129005172097031#heading-3
