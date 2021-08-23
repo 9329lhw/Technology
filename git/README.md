@@ -10,3 +10,10 @@
 远程仓库作为开发者的交互中心，同时围绕master、release、develop、feature
 feature是统称不止这一个）四种分支协作，完成多环境、多任务的代码管理。
 #### 4.Github工作流
+### git少见但很实用的命令
+#### reset,revert
+#### rebase
+    冲突合并
+#### cherry-pick
+    "挑拣"提交
+    参考链链接：https://www.jianshu.com/p/231b80486641
