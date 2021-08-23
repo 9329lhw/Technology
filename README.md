@@ -498,6 +498,7 @@
      $shapemark->drawSquare();`  
 ## 算法
 ### 10大排序算法
+![排序算法](asset/paixusuanfa.png) 
 #### 1.冒泡排序
     $data = [23, 45, 8, 11, 10, 31, 55, 96, 30, 22];
      $len = count($data);
