@@ -215,9 +215,9 @@
     参考链接：https://www.huaweicloud.com/articles/4c46a18c83e3cc2f322b2cce65ba1700.html
 ### 关键的字
 #### 1.trait关键字用处
-    Traits 是一种为类似 PHP 的单继承语言而准备的代码复用机制。
-    Trait 为了减少单继承语言的限制，使开发人员能够自由地在不同
-    层次结构内独立的类中复用方法集
+    Trait 是为类似 PHP 的单继承语言而准备的一种代码复用机制。Trait 为了减少单继承语言的限制，使开发人员能够
+    自由地在不同层次结构内独立的类中复用 method。Trait 和 Class 组合的语义定义了一种减少复杂性的方式，避免
+    传统多继承和 Mixin 类相关典型问题。
     解决php的单继承问题
 #### 2.static关键字的作用，跟其他的属性有什么区别
 #### 2.private,protected,public的区别
@@ -752,6 +752,20 @@
         3.JS层面，限制用户在x秒之内只能提交一次请求;
         4.前端缓存，当用户一直刷新页面的时候， 前端可以到浏览器里面获取缓存数据。
 ## mysql
+###  mysql流程
+![mysql流程](asset/mysqlzhixing.png)
+    MySQL 主要分为 Server 层和引擎层，
+    Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），
+    这个日志模块所有执行引擎都可以共用,redolog 只有 InnoDB 有。
+    引擎层是插件式的，目前主要包括，MyISAM,InnoDB,Memory 等。
+    SQL 等执行过程分为两类，一类对于查询等过程如下：
+    权限校验—》查询缓存—》分析器—》优化器—》权限校验—》执行器—》引擎
+    对于更新等语句执行流程如下：
+    分析器----》权限校验----》执行器—》引擎—redo log prepare—》binlog—》redo log commit
+    链接：
+    https://www.jianshu.com/p/bc21e019e7ce
+    https://www.cnblogs.com/annsshadow/p/5037667.html
+    https://www.cnblogs.com/wyq178/p/11576065.html
 ### 1.mysql基础整理
 #### MyISAM与InnoDB区别
     一、InnoDB支持事务，MyISAM不支持，这一点是非常之重要。
@@ -1130,6 +1144,11 @@
     4.Batching of Messages 批量量处理。合并小的请求，然后以流的方式进行交互，直顶网络上限。
     5.Pull 拉模式 使用拉模式进行消息的获取消费，与消费端处理能力相符。 
 ## 常用Linux命令
+    1.linux如何查看磁盘情况
+    df -lh
+    2.查找/usr目录下文件大小大于100MB的文件，并按照文件大小由大到小排列，并显示文件
+      大小
+    find / -type f -size +100M | xargs ls -lh -S
     1.查看物理CPU个数
     cat /proc/cpuinfo| grep "physical id"| sort| uniq| wc -l
     2.杀死全部php进程
