@@ -799,6 +799,7 @@
 ## mysql
 ###  mysql流程
 ![mysql流程](asset/mysqlzhixing.png)
+
     MySQL 主要分为 Server 层和引擎层，
     Server 层主要包括连接器、查询缓存、分析器、优化器、执行器，同时还有一个日志模块（binlog），
     这个日志模块所有执行引擎都可以共用,redolog 只有 InnoDB 有。
@@ -812,6 +813,11 @@
     https://www.cnblogs.com/annsshadow/p/5037667.html
     https://www.cnblogs.com/wyq178/p/11576065.html
 ### 1.mysql基础整理
+#### 三个join的含义：
+     left join（左联接）：返回左表中的所有记录以及和右表中的联接字段相等的记录。
+     right join（右联接）：返回右表中的所有记录以及和左表中的联接字段相等的记录。
+     inner join（等值联接）：只返回两个表中联接字段相等的记录。
+     链接：https://www.jianshu.com/p/e7e6ce1200a4
 #### MyISAM与InnoDB区别
     一、InnoDB支持事务，MyISAM不支持，这一点是非常之重要。
     二、MyISAM适合查询以及插入为主的应用，InnoDB适合频繁修改以及涉及到安全性较高的应用
