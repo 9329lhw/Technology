@@ -357,11 +357,8 @@
     参考链接：https://cloud.tencent.com/developer/article/1723045
 ## 设计模式
 ### 1.单例模式
-    
-    `class Singleton{
+    class Singleton{
          private static $instance;
-         private function __construct() {
-         }
          public $a;
          public static function getInstance(){
             if(!(self::$instance instanceof self)){
@@ -370,27 +367,20 @@
             } 
             return self::$instance;
          }
-         private function __clone() {
-             
-         }
      }
      
      $first = Singleton::getInstance();
-     $second = Singleton::getInstance();
-     $first->a = "zs";`
+     $first->a = "zs";
+     注：instanceof 用于确定一个 PHP 变量是否属于某一类 class 的实例
 ### 2.工厂模式
-    `interface mysql{
-         public function connect();
-     }
-     
-     class mysqli2 implements mysql{
+     class a {
          public function connect() {
-             echo "mysqli";
+             echo "A";
          }
      }
-     class pdo2 implements mysql{
+     class b {
          public function connect() {
-             echo "pdo";
+             echo "B";
          }
      }
      class mysqlFactory{
@@ -399,10 +389,10 @@
          }
      }
      
-     $obj = mysqlFactory::factory('pdo2');
-     $obj->connect();`
+     $obj = mysqlFactory::factory('a');
+     $obj->connect();
 ### 3.策略模式
-    `abstract class Strategy{
+    abstract class Strategy{
          public abstract function doAction($money);
      }
      
@@ -430,7 +420,7 @@
      
      
      $mode = new StrategyFind(new ManJianStrategy());
-     $mode->get(100);`
+     $mode->get(100);
 ### 4.适配器模式
     `/**
       * 目标角色
@@ -501,9 +491,9 @@
       
          }
       
-     }`
+     }
 ### 5.门面模式
-    `interface Shape{
+    interface Shape{
          public function draw();
      }
      
@@ -548,7 +538,7 @@
      $shapemark = new ShapeMark();
      $shapemark->drawCircle();
      $shapemark->drawRectangle();
-     $shapemark->drawSquare();`  
+     $shapemark->drawSquare(); 
 ## 算法
 ### 常见的数据结构
 #### 数组
@@ -725,6 +715,7 @@
         1.mysql悲观锁
             SELECT * FROM employee WHERE id = 1 FOR UPDATE;
         2.mysql乐观锁
+            update items set quantity=quantity-1,version=version+1 where id=100 and version=#{version};
             乐观锁不锁数据，而是通过版本号控制，会有不同结果返回给php，把决策权交给php。
         3.PHP+队列
             序列化，不会产生多个线程之间的冲突
@@ -732,7 +723,7 @@
             $redis->setnx($key, $value);
             问题：会锁线程（100000个抢购请求并发过来，有100000个线程，但同一时刻只会有一
             个线程在执行业务代码，其它线程都在死循环中等待）。
-            优化方式：设置更对的锁，比如抢购20个商品，就可以设置20个锁， 100000个人进来， 
+            优化方式：设置设置更多的锁，比如抢购20个商品，就可以设置20个锁， 100000个人进来， 
             就有20个线程是在执行业务逻辑的，其它的就在等待。
         5.PHP+redis乐观锁 redis watch
             核心代码：
@@ -762,9 +753,11 @@
         4.前端缓存，当用户一直刷新页面的时候， 前端可以到浏览器里面获取缓存数据。
 ## mysql
 ### 1.mysql基础整理
-#### 1.1 回表(查询某个字段时是先查的主键然后再得出查询结果)
+#### 1.1 回表
+    查询某个字段时先查的是主键再根据主键查找到对应字段
     即先定位主键值，再根据主键值定位行记录，性能相对于只扫描一遍聚集索引树的性能要低一些。
 #### 1.1 索引覆盖
+    指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取
     索引覆盖是一种避免回表查询的优化策略。具体的做法就是将要查询的数据作为索引列建立普通索引
     (可以是单列索引，也可以是联合索引)，
     这样的话就可以直接返回索引中的的数据，不需要再通过聚集索引去定位行记录，避免了回表的情况发生。    
@@ -841,13 +834,13 @@
     3、FULLTEXT索引（现在MyISAM和InnoDB引擎都支持了）
     4、R-Tree索引（用于对GIS数据类型创建SPATIAL索引）
 #### 从物理存储角度
-    1、聚集索引（clustered index）
-    2、非聚集索引（non-clustered index）
+    1、聚集索引（clustered index）--->主键索引
+    2、非聚集索引（non-clustered index）--->普通索引
     聚集索引和非聚集索引的区别如下：
-    　　1) 聚集索引和非聚集索引的根本区别是表记录的排列顺序和与索引的排列顺序是否一致，
+    1) 聚集索引和非聚集索引的根本区别是表记录的排列顺序和与索引的排列顺序是否一致，
     聚集索引表记录的排列顺序与索引的排列顺序一致，优点是查询速度快，因为一旦
     具有第一个索引值的纪录被找到，具有连续索引值的记录也一定物理的紧跟其后。
-    　　2) 聚集索引的缺点是对表进行修改速度较慢，这是为了保持表中的记录的物理顺序与索
+    2) 聚集索引的缺点是对表进行修改速度较慢，这是为了保持表中的记录的物理顺序与索
     引的顺序一致，而把记录插入到数据页的相应位置，必须在数据页中进行数据重排，
     降低了执行速度。非聚集索引指定了表中记录的逻辑顺序，但记录的物理顺序和索引的顺序不
     一致，聚集索引和非聚集索引都采用了B+树的结构，但非聚集索引的叶子层并不与实际的
@@ -872,12 +865,41 @@
     4、index_name指定索引的名称，为可选参数，如果不指定，MYSQL默认col_name为索引值；
     5、length为可选参数，表示索引的长度，只有字符串类型的字段才能指定索引长度；
     6、asc或desc指定升序或降序的索引值存储
+#### B+Tree相对于B-Tree有几点不同
+    非叶子节点只存储键值信息。
+    所有叶子节点之间都有一个链指针。
+    数据记录都存放在叶子节点中。
+#### 为什么B-tree 不适合mysql 查询
+    第一：B-树的每个节点都有data域（指针），这无疑增大了节点大小，说白了增加了磁盘IO次数
+    （磁盘IO一次读出的数据量大小是固定的，单个数据变大，每次读出的就少，IO次数增多，一次
+    IO多耗时啊！），而B+树除了叶子节点其它节点并不存储数据，节点小，磁盘IO次数就少。这是
+    优点之一。
+    第二：B+树所有的Data域在叶子节点，一般来说都会进行一个优化，就是将所有的叶子节点用指针
+    串起来。这样遍历叶子节点就能获得全部数据，这样就能进行区间访问啦
+    参考链接：https://blog.csdn.net/ahjxhy2010/article/details/105200801
 ### 主从延时
     我们可以使用percona-toolkit工具做校验，而该工具包含 
     1. pt-table-checksum 负责检测MySQL主从数据一致性 
     2. pt-table-sync负责挡住从数据不一致时修复数据，让他们保存数据的一致性 
     3. pt-heartbeat 负责监控MySQL主从同步延迟
     
+    1)、架构方面
+    1.业务的持久化层的实现采用分库架构，mysql服务可平行扩展，分散压力。
+    2.单个库读写分离，一主多从，主写从读，分散压力。这样从库压力比主库高，保护主库。
+    3.服务的基础架构在业务和mysql之间加入memcache或者redis的cache层。降低mysql的读压力。
+    4.不同业务的mysql物理上放在不同机器，分散压力。
+    5.使用比主库更好的硬件设备作为slave总结，mysql压力小，延迟自然会变小。
+    2)、硬件方面
+    1.采用好服务器，比如4u比2u性能明显好，2u比1u性能明显好。
+    2.存储用ssd或者盘阵或者san，提升随机写的性能。
+    3.主从间保证处在同一个交换机下面，并且是万兆环境。
+    总结，硬件强劲，延迟自然会变小。一句话，缩小延迟的解决方案就是花钱和花时间。
+    1)、mysql主从复制存在的问题：  
+    ● 主库宕机后，数据可能丢失  
+    ● 从库只有一个sql Thread，主库写压力大，复制很可能延时
+    2)、解决方法：  
+    ● 半同步复制---解决数据丢失的问题  
+    ● 并行复制----解决从库复制延迟的问题
     https://www.huaweicloud.com/articles/508e95b7494d24b6f70a1621b63c5567.html
 ### 分库分表
     垂直分库
