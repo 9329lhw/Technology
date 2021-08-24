@@ -1348,7 +1348,7 @@
         都得到通知。不过，观察者模式与单个事件源关联，而反应器模式则与多个事件源关联 。
     
 #### select,poll,epoll的区别：
-![io](asset/io_epoll.png)    
+![io](asset/io_epo.png)    
     参考链接：https://www.jianshu.com/p/397449cadc9a    
 ### 进程间通讯的方式
 	1.管道：速度慢，容量有限，只有父子进程能通讯    
