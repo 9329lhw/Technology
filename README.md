@@ -1159,7 +1159,8 @@
     socket_close($socket)
     作用：关闭套接字
     
-    服务端
+    常用程序：
+        服务端
     	<?php
     	//创建服务端的socket套接流,net协议为IPv4，protocol协议为TCP
     	$socket = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
@@ -1335,6 +1336,9 @@
         话给我们，我们会打电话通知你。
         Reactor模式与Observer模式在某些方面极为相似：当一个主体发生改变时，所有依属体
         都得到通知。不过，观察者模式与单个事件源关联，而反应器模式则与多个事件源关联 。
+    
+    select,poll,epoll的区别：
+![io](asset/io_epoll.png)        
 ### 进程间通讯的方式(https://www.cnblogs.com/zgq0/p/8780893.html)
 	1.管道：速度慢，容量有限，只有父子进程能通讯    
 	2.FIFO：任何进程间都能通讯，但速度慢    
