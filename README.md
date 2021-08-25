@@ -212,7 +212,7 @@
     继承，为了扩展，为了实现代码的重用，子类和父类之间提现的是is-a关系，接口则更多的
     体现一种行为约束，一种规则，一旦实现了这个接口，就要给出这个接口中所以方法的具体
     实现，也就是实现类对于接口中所有的方法都是有意义是的。
-    参考链接：https://www.huaweicloud.com/articles/4c46a18c83e3cc2f322b2cce65ba1700.html
+    参考链接：https://www.huaweicloud.com/articles/4c46a18c83e3cc2f322b2cce65ba1700.html 
 ### 关键的字
 #### 1.trait关键字用处
     Trait 是为类似 PHP 的单继承语言而准备的一种代码复用机制。Trait 为了减少单继承语言的限制，使开发人员能够

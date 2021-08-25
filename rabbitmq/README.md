@@ -32,3 +32,16 @@
         队列达到最大长度
 ### 常見問題
      如何保证RabbitMQ不被重复消费？    
+     
+     PHP实战RabbitMQ之延时队列篇
+     https://segmentfault.com/a/1190000022774099
+     
+     RabbitMQ和Kafka:如何处理消息丢失问题
+     https://segmentfault.com/a/1190000040394882
+     RabbitMQ和Kafka:如何保证消息的顺序性
+     https://segmentfault.com/a/1190000040394974
+     七种模式介绍与应用场景
+     https://segmentfault.com/a/1190000040126023
+     
+     消息中间件MQ与RabbitMQ面试题（2021最新版）
+     https://segmentfault.com/a/1190000039973497

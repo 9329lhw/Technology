@@ -5,7 +5,8 @@
     第二阶段：请求初始化阶段
     第三阶段：php脚本执行阶段
     第四阶段：请求结束阶段
-[参考链接](http://www.noobyard.com/article/p-haihkowd-vn.html)
+    参考链接：https://segmentfault.com/a/1190000014220536
+              http://www.noobyard.com/article/p-haihkowd-vn.html
 #### PHP语言的整体架构图(包括其核心的组成模块即可)
 
 ![RUNOOB 图标](asset/php.jpg)   
