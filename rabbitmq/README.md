@@ -80,9 +80,9 @@
 ##### 死信队列
         DLX - 死信队列(dead-letter-exchange) 利用DLX,当消息在一个队列中变成死信 (dead message) 之后,
         它能被重新publish到另一个Exchange中,这个Exchange就是DLX
-        使用场景：消息被拒绝(basic.reject / basic.nack),并且requeue = false 消息因TTL过期 
-        队列达到最大长度
-        
+        使用场景：消息被拒绝(basic.reject / basic.nack),并且requeue = false 消息因TTL过期 队列达到最大长度
+
+参考链接：https://juejin.cn/post/6844903865339346957        
 ### 常見問題
 ##### 如何保证消息百分百投递成功 
     方案一:消息信息落库,对消息状态进行打标(常见方案)
