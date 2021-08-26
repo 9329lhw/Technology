@@ -82,7 +82,13 @@
         它能被重新publish到另一个Exchange中,这个Exchange就是DLX
         使用场景：消息被拒绝(basic.reject / basic.nack),并且requeue = false 消息因TTL过期 队列达到最大长度
 
-参考链接：https://juejin.cn/post/6844903865339346957        
+参考链接：
+https://juejin.cn/post/6844903865339346957    
+
+https://segmentfault.com/a/1190000020329477
+
+https://gitee.com/573059382/coder-programming
+    
 ### 常見問題
 ##### 如何保证消息百分百投递成功 
     方案一:消息信息落库,对消息状态进行打标(常见方案)
@@ -120,3 +126,20 @@
 ### 代码实战     
 ##### PHP实战RabbitMQ之延时队列篇
      参考链接：https://segmentfault.com/a/1190000022774099
+     
+
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&mid=2247483858&idx=1&sn=2855220277c7c0ba4c1eea7824ea1684&chksm=96e670c1a191f9d7044c274552313fd46346f9192299a36841cd29c5294546335e3706d6968d&token=2058502909&lang=zh_CN&scene=21#wechat_redirect
+     
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&mid=2247483863&idx=1&sn=a3dd04abbcd11a3a823761dd3f50d3c1&chksm=96e670c4a191f9d2cc2f044d8ce6545994560d57153618a8210d381b481419aa869beeadd135&token=1195735466&lang=zh_CN&scene=21#wechat_redirect
+
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&mid=2247483867&idx=1&sn=c8abadc68fd40a662d7992a941d9a6e1&chksm=96e670c8a191f9de5f6a663eb44a905397526c94fa1dd929091644be4b4c24251eef82efb48e&token=822843029&lang=zh_CN&scene=21#wechat_redirect
+
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&mid=2247483858&idx=1&sn=2855220277c7c0ba4c1eea7824ea1684&chksm=96e670c1a191f9d7044c274552313fd46346f9192299a36841cd29c5294546335e3706d6968d&token=1195735466&lang=zh_CN&scene=21#wechat_redirect
+
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&mid=2247483875&idx=1&sn=0192f99cf8b0c1123f03ca4b392266e7&chksm=96e670f0a191f9e618dc4b143ec62698d945525348593794bfbaf567283fb3a1b37cfe9a9624&token=740701108&lang=zh_CN&scene=21#wechat_redirect
+
+https://mp.weixin.qq.com/s?__biz=MzIwMTg3NzYyOA==&amp;mid=2247483879&amp;idx=1&amp;sn=b3f89d2cb50271727b27e04a315c0a0f&amp;chksm=96e670f4a191f9e208248fd6006926a3a7c45209646e871e8115180ee45b7ebd4e287862a456&amp;token=1187527588&amp;lang=zh_CN#rd
+
+
+
+
