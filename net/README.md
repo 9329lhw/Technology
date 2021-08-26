@@ -119,30 +119,6 @@
 ### 常用的信号量
     SIGKILL 9 终止进程 杀死进程/关闭进程（暴力关闭）
     SIGUSR1 10 终止进程 用户定义信号1 
-### 网络安全
-    xss
-    csrf
-    点击劫持
-    传输安全(http窃听,http篡改)
-    中间人攻击
-    密码攻击
-    sql注入
-    文件上传
-    dos攻击
-    重放攻击
-    cc攻击
-    ARP欺骗
-    IP欺骗
-    SYN攻击：
-    在三次握手过程中，Server发送SYN-ACK之后，收到Client的ACK之前的TCP连接称为半连接
-    （half-open connect），此时Server处于SYN_RCVD状态，当收到ACK后，Server转入
-    ESTABLISHED状态。SYN攻击就是Client在短时间内伪造大量不存在的IP地址，并向Server
-    不断地发送SYN包，Server回复确认包，并等待Client的确认，由于源地址是不存在的，
-    因此，Server需要不断重发直至超时，这些伪造的SYN包将产时间占用未连接队列，导致
-    正常的SYN请求因为队列满而被丢弃，从而引起网络堵塞甚至系统瘫痪。
-    SYN攻击时一种典型的DDOS攻击，检测SYN攻击的方式非常简单，即当Server上有大量半连接
-    状态且源IP地址是随机的，则可以断定遭到SYN攻击了，使用如下命令可以让之现行：
-    #netstat -nap | grep SYN_RECV  
     
 ## 并发
 ### rps,qps,tps,pv,uv,吞吐量
@@ -165,16 +141,3 @@
             2.nginx访问日志
     吞吐量：单位时间内处理的任务数
     https://www.huaweicloud.com/articles/e69c2d94805734d47a5b86d4f70b7d3b.html
-
-## git
-### git有哪些主流的工作流
-#### 1.集中式工作流
-类似于集中式版本控制，以中央仓库作为项目所有修改的单点实体，在git中我们使用master
-分支作为主干分支，所有修改都提交到master上，在集中式工作流中我们只使用master。
-#### 2.功能分支工作流
-不在master分支上做开发，每个功能模块基于一个专门的分支。功能开发促成了Pull Request 
-工作流，每个PR让技术负责人review代码，检查无误后merge到master分支上。
-#### 3.Git flow工作流
-远程仓库作为开发者的交互中心，同时围绕master、release、develop、feature
-feature是统称不止这一个）四种分支协作，完成多环境、多任务的代码管理。
-#### 4.Github工作流
