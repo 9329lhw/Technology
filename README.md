@@ -1106,6 +1106,9 @@ https://segmentfault.com/a/1190000021464570
     2 消息百分百消费成功
     结合ack机制
     并且要解决幂等性问题
+![fenbushishiwu](asset/fenbushishiwu.png)    
+
+参考链接：https://www.liangzl.com/get-article-detail-199811.html
 ### 高可用
 #### MHA
 ##### 1.MHA原理
