@@ -1033,8 +1033,8 @@ https://segmentfault.com/a/1190000021464570
     2）IO 消耗大的 sql
     注意 pt-query-digest 分析中的 Rows examine 项
     3）为命中索引的 sql
-    注意 pt-query-digest 分析中 Rows examine （扫描行数） 和 Rows sent （发送行数）的对比,如果扫描行数远远大于发送行数，
-    则说明索引命中率并不高。
+    注意 pt-query-digest 分析中 Rows examine （扫描行数） 和 Rows sent （发送行数）的对比,如果扫描行数
+    远远大于发送行数，则说明索引命中率并不高。
     参考链接：https://blog.csdn.net/liuhaiabc/article/details/88682802
 
 ### 主从延时
