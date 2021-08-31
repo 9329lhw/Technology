@@ -1541,8 +1541,8 @@ https://segmentfault.com/a/1190000021464570
     502 Bad Gateway（网关故障）
         1.代理使用的服务器遇到了上游的无效响应
         2.若代理服务器+真实服务器，大部分情况下是真实服务器返回的请求失败，代理服务器才返回502
-    503 service unavailable 服务器暂时属于超负载或者正在停机维护，无法处理请求。
-    504 Gateway Time-out PHP-CGI已经执行，但是由于某种原因(一般是读取资源的问题)没有执行完毕而导致PHP-CGI进程终止。
+    503 service unavailable 服务器暂时属于超负载或者正在停机维护，无法处理请求
+    504 Gateway Time-out PHP-CGI已经执行，但是由于某种原因(一般是读取资源的问题)没有执行完毕而导致PHP-CGI进程终止
     参考链接：https://tool.oschina.net/commons?type=5
 ### http常见响应头信息
     Content-Encoding
